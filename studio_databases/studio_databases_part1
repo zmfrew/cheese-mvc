@@ -1,0 +1,16 @@
+Movies
+    *movie_id - primary key integer
+    *title - varchar(100)
+    *year - datetime
+    runtime
+    rating
+    genre
+    country
+    *director - foreign key interger
+Directors
+    *director_id - primary key 
+    *name
+    country
+    birthdate
+    awards
+    

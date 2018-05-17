@@ -1,0 +1,116 @@
+1. Find out which countries the directors in her collection are from (and make sure your result set 
+only lists each country only once).
+
+SELECT DISTINCT country 
+FROM directors
+
+2. Who are the French directors in her database?
+
+SELECT first, last
+FROM directors 
+WHERE country = "France";
+
+3. What is the date of the first time someone viewed one of Sarah's movies?
+
+SELECT date_viewed 
+FROM viewings 
+ORDER BY date_viewed ASC 
+LIMIT 1;
+
+or 
+
+SELECT MIN(date_viewed)
+FROM viewings;
+
+4. How many movies in her collection were directed by people born in the USA?
+
+SELECT directors.country, count(directors.country)
+FROM directors
+JOIN movies ON directors.director_id = movies.director_id
+WHERE country = "USA";
+
+5. What are the titles of the movies in her collection that were directed by Akira Kurosawa?
+
+SELECT movies.title, directors.first, directors.last
+FROM directors
+JOIN movies ON directors.director_id = movies.director_id
+WHERE directors.last = "Kurosawa";
+
+6. How many times has the movie "Talk to Me" been viewed?
+
+SELECT count(viewings.movie_id), movies.title
+FROM viewings
+JOIN movies ON viewings.movie_id = movies.movie_id
+GROUP BY movies.title;
+
+7. When was the last time someone viewed one of her movies?
+
+SELECT date_viewed 
+FROM viewings 
+ORDER BY date_viewed DESC
+LIMIT 1;
+
+8. What is the id of the last-viewed movie?
+
+SELECT movie_id
+FROM viewings 
+ORDER BY date_viewed DESC
+LIMIT 1;
+
+9. What is the title of the first movie she loaned to a friend for viewing?
+
+SELECT viewings.date_viewed, movies.title
+FROM viewings 
+INNER JOIN movies
+ON movies.movie_id = viewings.movie_id
+ORDER BY date_viewed ASC 
+LIMIT 1;
+
+10. What is the first and last name of the person who viewed the last-viewed movie?
+
+SELECT viewers.first, viewers.last 
+FROM viewers
+INNER JOIN viewings
+ON viewers.viewer_id = viewings.viewing_id
+ORDER BY viewings.date_viewed DESC
+LIMIT 1;
+
+Bonus Missions
+
+11. Write the SQL query to display the DVDs that others have watched in order of most viewed 
+to least viewed. What's the title of the most-viewed movie(s) in Sarah's collection?
+
+SELECT movies.title, count(*)
+FROM movies
+INNER JOIN viewings
+ON movies.movie_id = viewings.movie_id
+GROUP BY viewings.movie_id
+ORDER BY COUNT(*) DESC;
+
+12. Find the email of everyone who has watched "The Tango Lesson", so Sarah can email them 
+and ask what they thought of it.
+
+first find out everyone who watched "The Tango Lesson" then figure out their email using the viwer_id
+
+SELECT movies.title, viewers.email, viewers.first, viewers.last
+FROM viewings
+    INNER JOIN movies
+        ON viewings.movie_id = movies.movie_id
+    INNER JOIN viewers
+        ON viewings.viewer_id = viewers.viewer_id
+    WHERE movies.title = "The Tango Lesson"
+    ORDER BY viewers.last;
+
+13. Sarah is hosting a Kurosawa film festival soon and needs an email list to send out invites. 
+What are the full names and emails of all her friends who have watched any movie by Akira Kurosawa?
+
+SELECT movies.title, viewers.email, viewers.first, viewers.last
+FROM viewings
+    INNER JOIN movies
+        ON viewings.movie_id = movies.movie_id
+    INNER JOIN viewers
+        ON viewings.viewer_id = viewers.viewer_id
+    INNER JOIN directors
+        ON movies.director_id = directors.director_id
+    WHERE directors.first = "Akira" AND directors.last = "Kurosawa"
+    ORDER BY movies.title, viewers.last;
