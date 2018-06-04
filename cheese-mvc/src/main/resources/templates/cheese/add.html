@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
+<body class="container body-content">
+<h1 th:text="${title}">Default Title</h1>
 
-<body>
+<nav th:replace="fragments :: navigation"></nav>
 
-    <nav th:replace="fragments :: navigation"></nav>
-
-    <h1 th:text="${title}"></h1>
-
-    <p class="nameError" th:if="${cheeseNameError} and ${cheeseNameError.length()}">Please enter a valid cheese name!</p>
-
-    <form method="POST">
-        <input type="text" name="cheeseName" placeholder="cheese name"/>
-        <input type="text" name="cheeseDescription"  placeholder="cheese description"/>
-        <input type="submit" value="Add Cheese" />
-    </form>
+<form method="post" style="max-width:600px;">
+    <div class="form-group">
+        <label for="name-field">Name</label>
+        <input class="form-control" id="name-field" type="text" name="cheeseName" />
+    </div>
+    <div class="form-group">
+        <label for="desc-field">Description</label>
+        <input class="form-control" id="desc-field" type="text" name="cheeseDescription" />
+    </div>
+    <input type="submit" value="Add Cheese" />
+</form>
 
 </body>
 </html>
